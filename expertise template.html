@@ -1,0 +1,48 @@
+<!-- START OF FILE app/templates/expertise.html -->
+{% extends "base.html" %}
+
+{% block title %}Expertise Areas - Ask JDXX{% endblock %}
+
+{% block content %}
+<div class="container mt-4"> {# Standard page container #}
+    <h2>Expertise Areas</h2>
+    <p class="text-muted">Topics identified based on your interaction history.</p>
+    <hr>
+
+    {% if error %}
+        <div class="alert alert-danger" role="alert">Could not calculate expertise scores at this time.</div>
+    {% elif expertises %}
+        <div class="alert alert-light border shadow-sm mb-4" role="alert">
+            <i class="bi bi-lightbulb me-2"></i> These topics represent areas frequently discussed in your chats. Scores indicate relative frequency or importance (higher is more prominent). This feature is experimental.
+        </div>
+         <div class="list-group expertise-list">
+            {% for area in expertises %}
+             <div class="list-group-item list-group-item-action flex-column align-items-start mb-2 shadow-sm">
+                 <div class="d-flex w-100 justify-content-between align-items-center">
+                    <h5 class="mb-0 text-primary">{{ area.topic | title }}</h5>
+                    {# Use a progress bar for visual score #}
+                    <div class="progress ms-3" role="progressbar" aria-label="Expertise score for {{ area.topic }}" aria-valuenow="{{ area.display_score }}" aria-valuemin="0" aria-valuemax="100" style="height: 8px; width: 120px;">
+                      <div class="progress-bar bg-info" style="width: {{ area.display_score }}%"></div>
+                    </div>
+                 </div>
+                 {# <small>Raw Score: {{ area.raw_score }}</small> #} {# Optional #}
+             </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle me-2"></i> No specific expertise areas identified yet. Continue chatting to build personalized expertise insights.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block head_extra %}
+<style> /* Scoped styles */
+    .expertise-list .list-group-item { transition: transform 0.1s ease-in-out; }
+    .expertise-list .list-group-item:hover { transform: translateX(3px); }
+    .progress { background-color: var(--border-color); border-radius: 4px; }
+    [data-bs-theme="dark"] .progress { background-color: var(--accent-color); }
+</style>
+{% endblock %}
+<!-- END OF FILE app/templates/expertise.html -->

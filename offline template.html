@@ -1,0 +1,28 @@
+<!-- START OF FILE app/templates/offline.html -->
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light"> {# Simple default theme #}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Ask JDXX</title>
+    <style>
+        :root { --bs-link-color-rgb: 13, 110, 253; --bs-link-hover-color-rgb: 10, 88, 202; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif; margin: 0; padding: 2rem; text-align: center; background-color: #f8f9fa; color: #6c757d; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 90vh; }
+        h1 { color: #343a40; margin-bottom: 1rem; font-weight: 500; }
+        p { max-width: 450px; line-height: 1.6; }
+        svg { width: 70px; height: 70px; margin-bottom: 1.5rem; opacity: 0.4; }
+        a { color: rgb(var(--bs-link-color-rgb)); text-decoration: underline; cursor: pointer; }
+        a:hover { color: rgb(var(--bs-link-hover-color-rgb)); }
+        a:focus-visible { outline: 2px solid dodgerblue; outline-offset: 2px; border-radius: 2px;}
+        .btn { display: inline-block; font-weight: 400; line-height: 1.5; color: #0d6efd; text-align: center; text-decoration: none; vertical-align: middle; cursor: pointer; -webkit-user-select: none; user-select: none; background-color: transparent; border: 1px solid #0d6efd; padding: 0.375rem 0.75rem; font-size: 1rem; border-radius: 0.375rem; transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out; margin-top: 1rem;}
+        .btn:hover { color: #fff; background-color: #0d6efd; border-color: #0d6efd; }
+    </style>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-wifi-off" viewBox="0 0 16 16"><path d="M10.706 3.294A12.545 12.545 0 0 0 8 3C5.259 3 2.723 3.882.663 5.379a.485.485 0 0 0-.048.736.518.518 0 0 0 .732.052 11.54 11.54 0 0 1 3.17-.919L10.706 3.294zM.821 7.254C2.675 6.03 5.16 5.5 8 5.5c.71 0 1.408.08 2.08.236l.736-.736A10.001 10.001 0 0 0 8 5c-3.02 0-5.68.977-7.84 2.62a.485.485 0 0 0-.048.736.518.518 0 0 0 .732.052l.145-.108a8.977 8.977 0 0 1 1.808-1.243L.82 7.254zm8.23.93L7.116 6.25A8.755 8.755 0 0 1 8 6.5c2.06 0 3.89.673 5.38 1.794l.736-.736a10.001 10.001 0 0 0-6.872-2.057l.736.736zm-3.043.894L3.55 6.53A10.752 10.752 0 0 1 8 7.5c.916 0 1.804.12 2.64.342l.736-.736A11.752 11.752 0 0 0 8 7c-3.53 0-6.63 1.188-9.16 3.26a.485.485 0 0 0-.048.736.518.518 0 0 0 .732.052l.154-.115a11.043 11.043 0 0 1 2.69-1.703L6.008 9.078zM13.879 11.481C12.685 10.636 10.91 10 8 10c-1.22 0-2.33.154-3.37.426L6.26 12.01A7.5 7.5 0 0 1 8 11.5c1.44 0 2.73.422 3.86.981l.736-.736zM16 12.5a3.5 3.5 0 0 1-3.5 3.5c-1.27 0-2.4-.68-3.06-1.694L7.116 12.97A6.5 6.5 0 0 0 8 13.5c.845 0 1.647-.17 2.38-.475l.736-.736a2.5 2.5 0 0 0-3.18-3.18l-1.67-.11A3.5 3.5 0 0 1 7.5 16a3.5 3.5 0 0 1-3.5-3.5c0-.51.11-.99.3-.143l.736-.736c-.193.14-.47.303-.737.46A4.5 4.5 0 0 0 1 12.5C1 9.46 4.16 7 8 7c.638 0 1.26.08 1.86.236l.736-.736A10.001 10.001 0 0 0 8 6.5 6.5 6.5 0 0 0 1.5 12.5a4.5 4.5 0 0 0 4.5 4.5c.53 0 1.05-.08 1.55-.236l.736-.736c.193-.14.47-.303.737-.46A3.5 3.5 0 0 1 12.5 16a3.5 3.5 0 0 1 3.5-3.5z"/><path d="M1.323 1.323a.5.5 0 0 1 .707 0L15.364 14.67a.5.5 0 0 1-.707.707L1.323 2.03a.5.5 0 0 1 0-.707z"/></svg>
+    <h1>You Appear To Be Offline</h1>
+    <p>Ask JDXX requires an internet connection for most features. Please check your network settings and try again.</p>
+    <p><a href="/" class="btn">Try Reloading</a></p>
+</body>
+</html>
+<!-- END OF FILE app/templates/offline.html -->

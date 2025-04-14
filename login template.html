@@ -1,0 +1,37 @@
+<!-- START OF FILE app/templates/login.html -->
+{% extends "base.html" %}
+{% from '_formhelpers.html' import render_field, render_form_errors %}
+
+{% block title %}Log In - Ask JDXX{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <div class="auth-form-container">
+                <h2>Log In</h2>
+                {{ render_form_errors(form) }} {# Display form-level errors if any #}
+                <form method="POST" action="{{ url_for('auth.login', next=request.args.get('next')) }}" novalidate>
+                    {{ form.hidden_tag() }} {# CSRF token etc. #}
+
+                    {{ render_field(form.email, placeholder="Email address", label_visible=False) }}
+                    {{ render_field(form.password, placeholder="Password", label_visible=False) }}
+                    {{ render_field(form.remember_me) }}
+
+                    <div class="d-grid gap-2 mt-4">
+                         {{ render_field(form.submit, class="btn-lg") }}
+                    </div>
+                 </form>
+                 <hr>
+                 <div class="text-center">
+                    <p class="mb-1">
+                        New User? <a href="{{ url_for('auth.register') }}">Click here to Register</a>
+                    </p>
+                    {# <p><a href="#">Forgot Your Password?</a></p> #} {# TODO: Implement password reset #}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- END OF FILE app/templates/login.html -->

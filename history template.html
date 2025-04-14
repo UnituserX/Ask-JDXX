@@ -1,0 +1,82 @@
+<!-- START OF FILE app/templates/history.html -->
+{% extends "base.html" %}
+
+{% block title %}Chat History - Ask JDXX{% endblock %}
+
+{% block content %}
+<div class="container mt-4"> {# Standard page container #}
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+        <h2 class="mb-2 mb-md-0">Chat History</h2>
+         {% if history_items %} {# Show clear button only if history exists #}
+             <button id="clear-chat-btn" class="btn btn-sm btn-outline-danger">
+                 <i class="bi bi-trash me-1"></i> Clear All History
+             </button>
+         {% endif %}
+     </div>
+    <p class="text-muted">Your recent interactions (most recent first). History retrieval may not be perfectly chronological for very close entries.</p>
+    <hr>
+
+    {% if error %}
+        <div class="alert alert-danger" role="alert">Could not load history. Please try again later.</div>
+    {% elif history_items %}
+        <div class="list-group history-list mb-3">
+            {% for item in history_items %}
+             <div class="list-group-item flex-column align-items-start mb-2 shadow-sm history-item p-3">
+                <div class="d-flex w-100 justify-content-between mb-2 flex-wrap">
+                  <small class="text-muted me-3"><span class="fw-bold">Time:</span> {{ item.display_time }}</small>
+                  {% if item.metadata and item.metadata.response_mode %}
+                   <small><span class="badge rounded-pill text-bg-secondary">Mode: {{ item.metadata.response_mode }}</span></small>
+                  {% endif %}
+                </div>
+                {# Display stored text preserving line breaks #}
+                <div class="history-text mt-1" style="white-space: pre-wrap;">{{ item.text }}</div>
+                {# Optional: Add delete button per item? Needs backend route/JS #}
+                {# <button class="btn btn-sm btn-outline-danger mt-2 float-end" data-id="{{ item.id }}">Delete Entry</button> #}
+              </div>
+            {% endfor %}
+        </div>
+
+        {# --- Basic Pagination --- #}
+        <nav aria-label="History navigation" class="mt-4">
+          <ul class="pagination justify-content-center">
+            <li class="page-item {{ 'disabled' if current_page <= 1 else '' }}">
+              <a class="page-link" href="{{ url_for('main.history', page=current_page-1) if current_page > 1 else '#' }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span> Prev</a>
+            </li>
+            <li class="page-item active" aria-current="page">
+              <span class="page-link">Page {{ current_page }}</span>
+            </li>
+            <li class="page-item {{ 'disabled' if not has_more else '' }}">
+              <a class="page-link" href="{{ url_for('main.history', page=current_page+1) if has_more else '#' }}" aria-label="Next">Next <span aria-hidden="true">&raquo;</span></a>
+            </li>
+          </ul>
+        </nav>
+        {# --- End Pagination --- #}
+
+    {% else %}
+         <div class="alert alert-info" role="alert">
+           <i class="bi bi-info-circle me-2"></i> No chat history found. Start chatting to build your history!
+        </div>
+    {% endif %}
+
+</div> {# End container #}
+{% endblock %}
+
+{% block head_extra %}
+<style> /* Scoped styles for history page */
+    .history-item { border-radius: var(--border-radius); }
+    .history-text {
+        font-size: 0.95em; max-height: 200px; overflow-y: auto;
+        background-color: rgba(128, 128, 128, 0.05); padding: 0.5rem;
+        border-radius: calc(var(--border-radius) * 0.5);
+        scrollbar-width: thin; scrollbar-color: var(--secondary-color) transparent;
+    }
+    .history-text::-webkit-scrollbar { width: 6px; }
+    .history-text::-webkit-scrollbar-thumb { background-color: var(--secondary-color); border-radius: 3px; }
+    [data-bs-theme="dark"] .history-text { background-color: rgba(255, 255, 255, 0.05); }
+</style>
+{% endblock %}
+
+{% block scripts_extra %}
+{# app.js included in base handles clear button if element ID matches #}
+{% endblock %}
+<!-- END OF FILE app/templates/history.html -->

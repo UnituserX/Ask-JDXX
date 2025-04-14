@@ -1,0 +1,68 @@
+<!-- START OF FILE app/templates/subscription.html -->
+{% extends "base.html" %}
+
+{% block title %}Subscription - Ask JDXX{% endblock %}
+
+{% block content %}
+<div class="container mt-4"> {# Standard page container #}
+    <h2>Subscription Management</h2>
+    <hr>
+
+    {# Feedback from Stripe redirects #}
+    {% if request.args.get('session_id') %}
+     <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert"><i class="bi bi-check-circle-fill me-2"></i> Welcome to Pro! Your subscription is active.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+    {% endif %}
+    {% if request.args.get('cancelled') == 'true' %} {# Check for 'true' string #}
+     <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert"><i class="bi bi-exclamation-triangle me-2"></i> Subscription checkout was cancelled.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+    {% endif %}
+
+    {# --- Current Status Card --- #}
+    <div class="card shadow-sm mb-4">
+         <div class="card-header fw-bold">Your Current Plan</div>
+         <div class="card-body">
+             {% if current_user.is_subscribed %}
+                <h5 class="card-title text-success mb-3">Pro Plan Active <i class="bi bi-patch-check-fill"></i></h5>
+                <p class="card-text">You have full access to all Ask JDXX features.</p>
+                 {% if sub_end_date %}
+                    <p class="mb-3"><small class="text-muted">Current period ends/renews: {{ sub_end_date.strftime('%B %d, %Y at %H:%M %Z') }}</small></p>
+                 {% else %}
+                    <p class="mb-3"><small class="text-muted">Subscription active.</small></p>
+                 {% endif %}
+                 {# --- Manage Subscription Form --- #}
+                 <form action="{{ url_for('main.create_customer_portal_session_route') }}" method="POST" id="manage-subscription-form" class="mt-3">
+                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                     <button type="submit" id="manage-subscription-link" class="btn btn-info">
+                         <i class="bi bi-gear me-1"></i> Manage Billing & Subscription
+                     </button>
+                 </form>
+                 <small class="text-muted d-block mt-1">Redirects to Stripe's secure portal.</small>
+             {% else %}
+                 <h5 class="card-title text-secondary mb-3">Free Tier <i class="bi bi-info-circle"></i></h5>
+                 <p class="card-text">You are using the free tier with standard features.</p>
+                 <p class="card-text"><strong>Upgrade to Pro for:</strong></p>
+                 <ul class="list-unstyled mb-4">
+                     <li><i class="bi bi-check-lg text-success me-2"></i>Extended conversation memory</li>
+                     <li><i class="bi bi-check-lg text-success me-2"></i>Priority access</li>
+                     <li><i class="bi bi-check-lg text-success me-2"></i>Advanced AI models</li>
+                     <li><i class="bi bi-check-lg text-success me-2"></i>Support future development!</li>
+                 </ul>
+                  {# --- Checkout Button Form --- #}
+                 <form action="{{ url_for('main.create_checkout') }}" method="POST">
+                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                     {# Assumes default price ID from config is used #}
+                     <button type="submit" class="btn btn-success btn-lg">
+                         <i class="bi bi-rocket-takeoff me-1"></i> Upgrade to Pro Now
+                     </button>
+                 </form>
+                 {# --------------------------- #}
+             {% endif %}
+         </div>
+     </div>
+ </div> {# End container #}
+{% endblock %}
+
+{% block scripts_extra %}
+{# Include app.js for portal redirect button handler if implemented #}
+{# <script src="{{ url_for('static', filename='js/app.js') }}"></script> #}
+{% endblock %}
+<!-- END OF FILE app/templates/subscription.html -->

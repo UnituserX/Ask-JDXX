@@ -1,0 +1,78 @@
+<!-- START OF FILE app/templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Chat - Ask JDXX{% endblock %}
+
+{% block content %}
+<div class="container-fluid chat-container flex-grow-1">
+
+    {# --- Chat Options Sidebar --- #}
+    <aside class="chat-options d-none d-lg-block"> {# Hidden on smaller screens #}
+        <fieldset class="mb-3 response-modes">
+            <legend>Response Mode</legend>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="responseMode" id="modeFast" value="fast">
+                <label class="form-check-label" for="modeFast">Fast</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="responseMode" id="modeBalanced" value="balanced" checked>
+                <label class="form-check-label" for="modeBalanced">Balanced</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="responseMode" id="modeThorough" value="thorough">
+                <label class="form-check-label" for="modeThorough">Thorough</label>
+            </div>
+        </fieldset>
+
+        <div class="additional-options">
+            <legend>Options</legend>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="factVerification" disabled>
+                <label class="form-check-label" for="factVerification">Fact Verification (WIP)</label>
+            </div>
+             <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="offlineMode" disabled>
+                <label class="form-check-label" for="offlineMode">Offline Active</label>
+            </div>
+        </div>
+
+        {% if current_user.is_authenticated %}
+        <div class="mt-4 pt-3 border-top">
+            <button id="clear-chat-btn" class="btn btn-sm btn-outline-danger w-100">
+                <i class="bi bi-trash me-1"></i> Clear Chat Display
+            </button>
+        </div>
+        {% endif %}
+    </aside>
+
+    {# --- Main Chat Panel --- #}
+    <section class="chat-main d-flex flex-column">
+        {# --- Chat Log Area --- #}
+        <div id="chat-log" class="chat-log-area flex-grow-1" aria-live="polite">
+             <div class="message system-message">Welcome to Ask JDXX! How can I assist you today?</div>
+             {# Messages added dynamically by JS #}
+        </div>
+
+        {# --- Typing Indicator --- #}
+        <div id="typing-indicator" class="typing-indicator d-none px-3 py-2">
+           <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+        </div>
+        {# --- Loading Indicator (Fallback) --- #}
+        <div id="loading-indicator" class="loading-indicator d-none px-3 py-2">Processing...</div>
+
+        {# --- Chat Input Form --- #}
+        <form id="chat-form" class="chat-input-form">
+             <textarea id="user-input" class="form-control" placeholder="Ask anything..." rows="1" required aria-label="Chat input"></textarea>
+             <button id="send-button" type="submit" class="btn btn-primary" aria-label="Send message">
+                 <i class="bi bi-send"></i><span class="d-none d-sm-inline ms-1">Send</span>
+             </button>
+         </form>
+    </section>
+
+</div> {# End chat-container #}
+{% endblock %}
+
+{% block scripts_extra %}
+{# app.js loaded in base.html handles chat logic #}
+{% endblock %}
+<!-- END OF FILE app/templates/index.html -->

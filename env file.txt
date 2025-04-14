@@ -1,0 +1,49 @@
+# --- START OF FILE .env ---
+# ==========================
+# Flask Core Configuration
+# ==========================
+# Generate a strong secret key, e.g., using Python: import secrets; secrets.token_hex(24)
+SECRET_KEY='!!!YOUR_VERY_STRONG_SECRET_KEY_HERE!!!'
+FLASK_CONFIG='development' # Options: development, testing, production
+FLASK_APP='run.py'
+
+# ==========================
+# Database Configuration
+# ==========================
+# Uncomment and configure for PostgreSQL/MySQL etc. in production
+# DATABASE_URL='postgresql://user:password@host:port/dbname'
+# For default SQLite development (path relative to project root):
+DATABASE_URL='sqlite:///instance/app.db'
+
+# ==========================
+# External Service API Keys
+# ==========================
+# --- OpenAI ---
+OPENAI_API_KEY='!!!YOUR_OPENAI_KEY_HERE!!!'
+
+# --- Stripe ---
+# Use TEST keys for development/testing
+STRIPE_SECRET_KEY='!!!YOUR_STRIPE_TEST_SECRET_KEY!!!'
+STRIPE_PUBLISHABLE_KEY='!!!YOUR_STRIPE_TEST_PUBLISHABLE_KEY!!!'
+STRIPE_WEBHOOK_SECRET='!!!YOUR_STRIPE_CLI_WEBHOOK_SECRET!!!' # For local testing
+STRIPE_PRICE_ID='!!!YOUR_STRIPE_PRICE_ID_FOR_PRO_PLAN!!!'
+
+# ==========================================
+# Google Drive Sync Configuration (Optional)
+# ==========================================
+GDRIVE_CREDENTIALS_PATH='credentials.json' # Ensure this file exists (download from Google Cloud)
+GDRIVE_TOKEN_PATH='token.pickle' # Will be created on first auth
+# GDRIVE_APP_FOLDER_NAME='AskJDXX_Memory_Backups_Dev' # Optional override
+USER_MEMORY_STORE_PATH='./user_memory_stores' # Where ChromaDB data lives
+GDRIVE_SYNC_INTERVAL_HOURS=1 # How often the background upload job runs
+
+# ==========================================
+# Embedding Model (Optional Override)
+# ==========================================
+# EMBEDDING_MODEL="all-mpnet-base-v2" # Default is "all-MiniLM-L6-v2"
+
+# ==========================
+# Other Settings (Optional)
+# ==========================
+# LOG_TO_STDOUT=1 # Set to 1 to log to console (e.g., for Docker/Heroku)
+# --- END OF FILE .env ---

@@ -1,0 +1,85 @@
+# --- START OF FILE .gitignore ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+# *.manifest
+# *.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Application Specific
+instance/*
+!instance/.gitkeep # Keep instance folder, but ignore contents except .gitkeep
+logs/
+*.log
+*.db # Ignore SQLite files directly in root
+*.sqlite
+*.sqlite3
+token.pickle # Ignore default GDrive token file
+token_*.pickle # Ignore other GDrive token files
+credentials.json # Ignore default GDrive credentials file
+*.last_modified # Ignore memory modification timestamp files
+user_memory_stores/ # Ignore ChromaDB persistent data
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*~
+# --- END OF FILE .gitignore ---

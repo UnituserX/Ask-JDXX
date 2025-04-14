@@ -1,0 +1,35 @@
+<!-- START OF FILE app/templates/register.html -->
+{% extends "base.html" %}
+{% from '_formhelpers.html' import render_field, render_form_errors %}
+
+{% block title %}Register - Ask JDXX{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+             <div class="auth-form-container">
+                 <h2>Create Account</h2>
+                 {{ render_form_errors(form) }} {# Display form-level errors if any #}
+                 <form method="POST" action="{{ url_for('auth.register') }}" novalidate>
+                     {{ form.hidden_tag() }}
+
+                     {{ render_field(form.username, placeholder="Choose a username", autocomplete="username") }}
+                     {{ render_field(form.email, placeholder="Your email address", autocomplete="email") }}
+                     {{ render_field(form.password, placeholder="Create password (min 8 chars)", autocomplete="new-password") }}
+                     {{ render_field(form.confirm_password, placeholder="Confirm password", autocomplete="new-password") }}
+
+                     <div class="d-grid gap-2 mt-4">
+                         {{ render_field(form.submit, class="btn-lg") }}
+                     </div>
+                 </form>
+                 <hr>
+                 <div class="text-center">
+                     <p>Already have an account? <a href="{{ url_for('auth.login') }}">Log In Here</a></p>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+{% endblock %}
+<!-- END OF FILE app/templates/register.html -->

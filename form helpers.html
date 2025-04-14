@@ -1,0 +1,68 @@
+<!-- START OF FILE app/templates/_formhelpers.html -->
+{# Jinja2 macro file for rendering Flask-WTF fields with Bootstrap 5 styling #}
+{% macro render_field(field, label_visible=True, class='', placeholder='', hide_label_class='visually-hidden', **kwargs) %}
+    {# Renders a single Flask-WTF field with Bootstrap 5 styling. #}
+    <div class="mb-3 {{ class }}">
+        {# Render Label #}
+        {% set label_class = 'form-label' %}
+        {% if not label_visible and field.type != 'HiddenField' and field.type != 'CSRFTokenField' and field.type != 'BooleanField' %}
+            {% set label_class = label_class + ' ' + hide_label_class %}
+        {% endif %}
+        {% if field.type != 'HiddenField' and field.type != 'CSRFTokenField' and field.type != 'BooleanField' %}
+            {{ field.label(class=label_class) }}
+        {% endif %}
+
+        {# Determine input class and add 'is-invalid' if errors exist #}
+        {% set field_class = 'form-control' %}
+        {% if field.errors %} {% set field_class = field_class + ' is-invalid' %} {% endif %}
+
+        {# Add placeholder if provided #}
+        {% if placeholder %} {% set kwargs = kwargs|combine({'placeholder': placeholder}) %} {% endif %}
+
+        {# Render Field based on Type #}
+        {% if field.type == 'BooleanField' %}
+            <div class="form-check">
+                {{ field(class="form-check-input" + (" is-invalid" if field.errors else "") + " " + kwargs.pop('class_', ''), **kwargs) }}
+                {{ field.label(class="form-check-label") }}
+            </div>
+        {% elif field.type == 'RadioField' %}
+            {% for subfield in field %}
+            <div class="form-check">
+                {{ subfield(class="form-check-input" + (" is-invalid" if field.errors else "") + " " + kwargs.pop('class_', ''), **kwargs) }}
+                {{ subfield.label(class="form-check-label") }}
+            </div>
+            {% endfor %}
+        {% elif field.type == 'SubmitField' %}
+            {{ field(class="btn btn-primary " + kwargs.pop('class_', ''), **kwargs) }}
+        {% elif field.type == 'EmailField' %}
+            {{ field(class=field_class + " " + kwargs.pop('class_', ''), type='email', **kwargs) }}
+        {% elif field.type == 'PasswordField' %}
+            {{ field(class=field_class + " " + kwargs.pop('class_', ''), type='password', **kwargs) }}
+        {% elif field.type == 'TextAreaField' %}
+            {{ field(class=field_class + " " + kwargs.pop('class_', ''), rows=kwargs.get('rows', 3), **kwargs) }}
+        {% else %} {# Default for StringField, IntegerField, etc. #}
+            {{ field(class=field_class + " " + kwargs.pop('class_', ''), **kwargs) }}
+        {% endif %}
+
+        {# Render Errors #}
+        {% if field.errors %}
+            <div class="invalid-feedback d-block"> {# Ensure feedback is displayed #}
+                {{ field.errors|join(' ') }}
+            </div>
+        {% endif %}
+        {# Render Description/Help Text #}
+        {% if field.description %} <div class="form-text">{{ field.description }}</div> {% endif %}
+    </div>
+{% endmacro %}
+
+{# Optional: Macro for rendering non-field errors (form-level errors) #}
+{% macro render_form_errors(form) %}
+    {% if form.errors and form.errors.get('__all__') %}
+        <div class="alert alert-danger mt-3" role="alert">
+            <ul class="mb-0">{% for error in form.errors['__all__'] %}<li>{{ error }}</li>{% endfor %}</ul>
+        </div>
+    {% elif form.errors and not form.csrf_token.errors %} {# Generic fallback #}
+        <div class="alert alert-danger mt-3" role="alert">Please correct the errors indicated below.</div>
+    {% endif %}
+{% endmacro %}
+<!-- END OF FILE app/templates/_formhelpers.html -->

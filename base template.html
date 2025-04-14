@@ -1,0 +1,153 @@
+<!-- START OF FILE app/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light"> {# Default theme, JS will override based on localStorage #}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ config.APP_DESCRIPTION }}">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"> {# Light theme #}
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#212529">  {# Dark theme #}
+    <meta name="color-scheme" content="light dark">
+
+    <title>{% block title %}Ask JDXX{% endblock %}</title>
+
+    {# --- Favicons --- #}
+    <link rel="icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" sizes="any">
+    {# <link rel="icon" href="{{ url_for('static', filename='icons/icon.svg') }}" type="image/svg+xml"> #}
+    {# <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}"> #}
+
+    {# --- Web App Manifest --- #}
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    {# --- CSS --- #}
+    {# Bootstrap 5 CSS (Consider local hosting) #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    {# Bootstrap Icons #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    {# Highlight.js CSS (Themes based on preference) #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)">
+
+    {# Your Custom CSS #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {# Block for page-specific head content #}
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <div class="app-container d-flex flex-column vh-100">
+
+        {# --- Top Bar Navbar --- #}
+        <header class="app-header">
+            <nav class="navbar navbar-expand-md">
+                 <div class="container-fluid">
+                    <a class="navbar-brand app-title" href="{{ url_for('main.index') }}">Ask JDXX</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                     <div class="collapse navbar-collapse" id="navbarNav">
+                         <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                             <li class="nav-item"><a class="nav-link {{ 'active' if request.endpoint == 'main.index' else '' }}" href="{{ url_for('main.index') }}">Chat</a></li>
+                             {% if current_user.is_authenticated %}
+                             <li class="nav-item"><a class="nav-link {{ 'active' if request.endpoint == 'main.history' else '' }}" href="{{ url_for('main.history') }}">History</a></li>
+                             <li class="nav-item"><a class="nav-link {{ 'active' if request.endpoint == 'main.expertise' else '' }}" href="{{ url_for('main.expertise') }}">Expertise</a></li>
+                             <li class="nav-item"><a class="nav-link {{ 'active' if request.endpoint == 'main.subscription' else '' }}" href="{{ url_for('main.subscription') }}">Subscription</a></li>
+                             {% endif %}
+                         </ul>
+                         <div class="d-flex align-items-center">
+                             <button id="theme-toggle" class="btn btn-outline-secondary theme-toggle-btn me-2" type="button" title="Toggle theme"><span id="theme-icon">☀️</span></button>
+                             <div class="user-section">
+                                 {% if current_user.is_authenticated %}
+                                     <div class="nav-item dropdown">
+                                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                             <i class="bi bi-person-circle me-1"></i><span>{{ current_user.username }}</span>
+                                             {% if current_user.is_subscribed %}<span class="badge rounded-pill text-bg-success ms-1">Pro</span>{% else %}<span class="badge rounded-pill text-bg-secondary ms-1">Free</span>{% endif %}
+                                         </a>
+                                         <ul class="dropdown-menu dropdown-menu-end">
+                                             <li><a class="dropdown-item" href="{{ url_for('main.subscription') }}"><i class="bi bi-credit-card me-2"></i>Subscription</a></li>
+                                             <li><hr class="dropdown-divider"></li>
+                                             <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                         </ul>
+                                     </div>
+                                 {% else %}
+                                     <ul class="navbar-nav flex-row"><li class="nav-item me-2"><a class="btn btn-outline-primary btn-sm" href="{{ url_for('auth.login') }}">Login</a></li><li class="nav-item"><a class="btn btn-primary btn-sm" href="{{ url_for('auth.register') }}">Register</a></li></ul>
+                                 {% endif %}
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </nav>
+         </header>
+
+         {# --- Flash Messages --- #}
+         <div class="container flash-messages-container mt-3" style="max-width: 960px;"> {# Limit width #}
+             {% with messages = get_flashed_messages(with_categories=true) %}
+             {% if messages %}
+                 {% for category, message in messages %}
+                 {% set alert_class = 'alert-' + (category if category in ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'] else 'info') %}
+                 <div class="alert {{ alert_class }} alert-dismissible fade show shadow-sm" role="alert">
+                     {{ message }}
+                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                 </div>
+                 {% endfor %}
+             {% endif %}
+             {% endwith %}
+             {% if sync_warning %} {# Specific warning for GDrive sync issues #}
+             <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+                 <i class="bi bi-cloud-slash me-2"></i> {{ sync_warning }}
+                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+             </div>
+             {% endif %}
+         </div>{# End flash-messages-container #}
+
+
+        {# --- Main Content Wrapper --- #}
+        <main class="content-wrapper flex-grow-1">
+             {% block content %}{% endblock %} {# Child templates fill this #}
+        </main>
+        {# -------------------------- #}
+
+
+        {# --- Footer --- #}
+        <footer class="app-footer text-center py-3 mt-auto">
+             <div class="container">© {% block footer_year %}{{ now.year if now else '' }}{% endblock %} Ask JDXX. All rights reserved.</div>
+         </footer>
+
+     </div> {# End app-container #}
+
+
+     {# --- JavaScript --- #}
+     {# Libraries #}
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.11/purify.min.js" integrity="sha512-Y3zMwsAnNDUy+1Sj7hXkYj6X6ESAAT70m3sBq0CeGN53VXVhjLh+XKC85PkHGPKUmZ+LbzWQpPlQGPJMM00XGw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+     {# Optional: Load specific languages for highlight.js #}
+     {# <script src=".../languages/python.min.js"></script> #}
+
+     {# Application Scripts #}
+     <script>
+         // Define global JS variables for URLs and CSRF token
+         const askEndpointUrl = "{{ url_for('main.ask', _external=True) }}"; // Use external=True if needed
+         const clearHistoryUrl = "{{ url_for('main.clear_history', _external=True) }}";
+         const createPortalUrl = "{{ url_for('main.create_customer_portal_session', _external=True) }}";
+         {% if csrf_token %}
+         const csrfToken = "{{ csrf_token() }}"; // csrf_token() provided by context processor
+         {% else %}
+         const csrfToken = null; console.warn("CSRF Token not available to JavaScript.");
+         {% endif %}
+     </script>
+     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+     {# Service Worker Registration #}
+     <script>
+         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register("{{ url_for('static', filename='service-worker.js') }}").then(reg => console.log('SW registered:', reg.scope)).catch(err => console.error('SW registration failed:', err)); }); }
+     </script>
+
+     {# Block for page-specific scripts #}
+     {% block scripts_extra %}{% endblock %}
+
+ </body>
+ </html>
+<!-- END OF FILE app/templates/base.html -->
